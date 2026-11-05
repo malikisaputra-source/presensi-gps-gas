@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo Presensi GPS + Selfie</title>
+<!-- Demo statis: meniru tampilan index.html & admin.html dengan data contoh. Tidak terhubung ke server. -->
+<style>
+  :root{--navy:#0b1f3a;--navy-2:#132c50;--lime:#c6f432;--merah:#ff5d5d;--teks:#e9eef7;--redup:#9fb0c9;--kartu:#10284a;--garis:#1f3c66}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:#06142a;color:var(--teks);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;align-items:center;justify-content:center;gap:28px;padding:24px;flex-wrap:wrap;
+    background-image:radial-gradient(circle at 15% 20%,rgba(198,244,50,.08),transparent 40%),radial-gradient(circle at 85% 80%,rgba(59,130,246,.12),transparent 45%)}
+  .hp{width:360px;height:740px;border-radius:44px;background:var(--navy);border:10px solid #1a2c47;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden;position:relative;flex:none}
+  .hp-isi{padding:16px 14px;height:100%;overflow:hidden}
+  .atas{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800}
+  .logo i{width:30px;height:30px;border-radius:9px;background:var(--lime);display:grid;place-items:center;color:var(--navy);font-style:normal;font-weight:900}
+  .jam{text-align:right}.jam b{display:block;font-size:19px;font-variant-numeric:tabular-nums}.jam small{color:var(--redup);font-size:11.5px}
+  .kartu{background:var(--kartu);border:1px solid var(--garis);border-radius:16px;padding:12px;margin-bottom:10px}
+  .salam{display:flex;justify-content:space-between}.salam h2{margin:0;font-size:16px}.redup{color:var(--redup)}.kecil{font-size:12px}
+  .tautan{color:var(--lime);font-weight:700;font-size:12.5px}
+  .status-hari{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .status-hari div{background:var(--navy);border-radius:10px;padding:7px 10px}.status-hari small{color:var(--redup);font-size:11px}.status-hari b{display:block;font-size:14px}
+  .peta{height:128px;border-radius:12px;overflow:hidden}
+  .lokasi{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .lencana{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--navy);color:var(--lime)}
+  .lencana::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime)}
+  .kamera{height:150px;border-radius:12px;overflow:hidden;position:relative}
+  .kamera .stempel{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);font-size:11px;padding:4px 8px}
+  .baris{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tombol{padding:12px;border-radius:12px;font-weight:800;text-align:center;background:var(--lime);color:var(--navy)}
+  .tombol.mati{opacity:.4}
+  .tombol.garis{background:transparent;color:var(--teks);border:1px solid var(--garis);padding:9px;font-size:13px}
+  /* admin */
+  .admin{width:720px;max-width:100%;background:#f3f5f9;color:#0f1b2d;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .admin header{background:var(--navy);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+  .admin header .logo i{width:28px;height:28px}
+  .admin main{padding:16px 18px}
+  .alat{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .seg{display:inline-flex;background:#fff;border:1px solid #e1e6ee;border-radius:9px;padding:3px}
+  .seg span{padding:5px 12px;border-radius:7px;font-weight:700;color:#5b6b82;font-size:13px}.seg span.on{background:var(--navy);color:#fff}
+  .inp,.btn{background:#fff;border:1px solid #e1e6ee;border-radius:9px;padding:6px 11px;font-size:13px;font-weight:600}
+  .angka{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+  .angka div{background:#fff;border:1px solid #e1e6ee;border-radius:12px;padding:10px 12px}.angka small{color:#5b6b82;font-weight:600;font-size:12px}.angka b{display:block;font-size:22px}
+  .angka div:first-child{background:var(--navy);color:#fff;border-color:var(--navy)}.angka div:first-child small{color:var(--lime)}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e1e6ee;border-radius:12px;overflow:hidden;font-size:13px}
+  th,td{padding:8px 11px;text-align:left;border-bottom:1px solid #e1e6ee}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#5b6b82;background:#fafbfd}
+  .st{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700}
+  .tepat{background:#e6f6ec;color:#2f855a}.telat{background:#fdf3e1;color:#b7791f}.absen{background:#fdeaea;color:#d93a3a}
+  .foto{width:26px;height:26px;border-radius:7px;vertical-align:middle}
+  .label-demo{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--navy);font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px}
+</style>
+</head>
+<body>
+<span class="label-demo">DEMO · data contoh</span>
+
+<div class="hp"><div class="hp-isi">
+  <div class="atas"><div class="logo"><i>P</i>Kantor Pusat</div><div class="jam"><b id="jam">07:56:12</b><small>Kamis, 5 November</small></div></div>
+  <div class="kartu">
+    <div class="salam"><div><h2>Budi Santoso</h2><span class="redup kecil">Staf Gudang · K001</span></div><span class="tautan">Ganti akun</span></div>
+    <div class="status-hari"><div><small>Masuk</small><b>Belum</b></div><div><small>Pulang</small><b>Belum</b></div></div>
+  </div>
+  <div class="kartu">
+    <svg class="peta" viewBox="0 0 320 128" width="100%" height="128" aria-label="Peta lokasi">
+      <rect width="320" height="128" fill="#132c50"/>
+      <g stroke="#1f3c66" stroke-width="10" fill="none"><path d="M-10 90 L330 60"/><path d="M90 -10 L120 140"/><path d="M230 -10 L210 140"/></g>
+      <g stroke="#2a4c7d" stroke-width="2" fill="none"><path d="M-10 30 L330 20"/><path d="M40 -10 L30 140"/><path d="M280 -10 L300 140"/></g>
+      <rect x="140" y="20" width="44" height="28" rx="3" fill="#1a355e"/><rect x="246" y="78" width="40" height="30" rx="3" fill="#1a355e"/><rect x="48" y="96" width="30" height="22" rx="3" fill="#1a355e"/>
+      <circle cx="165" cy="70" r="46" fill="rgba(198,244,50,.12)" stroke="#c6f432" stroke-width="2"/>
+      <circle cx="165" cy="70" r="6" fill="#c6f432" stroke="#0b1f3a" stroke-width="2"/>
+      <circle cx="184" cy="82" r="16" fill="rgba(59,130,246,.15)" stroke="#3b82f6"/>
+      <circle cx="184" cy="82" r="7" fill="#3b82f6" stroke="#fff" stroke-width="3"/>
+    </svg>
+    <div class="lokasi"><span class="lencana">Dalam radius · 24 m (±12 m)</span><span class="tautan">Perbarui</span></div>
+  </div>
+  <div class="kartu">
+    <div class="kamera">
+      <svg viewBox="0 0 300 190" width="100%" height="150" preserveAspectRatio="xMidYMid slice" aria-label="Contoh foto selfie (ilustrasi)">
+        <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2c4a72"/><stop offset="1" stop-color="#16294a"/></linearGradient></defs>
+        <rect width="300" height="190" fill="url(#bg)"/>
+        <rect x="20" y="20" width="60" height="90" rx="4" fill="#20406a"/><rect x="230" y="30" width="50" height="70" rx="4" fill="#20406a"/>
+        <path d="M80 190 C90 140 120 128 150 128 C180 128 210 140 220 190Z" fill="#c6f432"/>
+        <path d="M128 132 L150 156 L172 132" fill="#0b1f3a" opacity=".25"/>
+        <rect x="140" y="110" width="20" height="24" fill="#d9a77a"/>
+        <ellipse cx="150" cy="86" rx="32" ry="38" fill="#e8b98c"/>
+        <path d="M117 82 C116 52 138 44 152 45 C172 46 186 58 184 82 C178 66 166 62 150 62 C134 62 124 68 117 82Z" fill="#2b1d14"/>
+        <circle cx="138" cy="88" r="3.4" fill="#2b1d14"/><circle cx="162" cy="88" r="3.4" fill="#2b1d14"/>
+        <path d="M139 104 Q150 112 161 104" stroke="#a0623e" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="stempel">5/11/2026 07.56.08 · K001</div>
+    </div>
+    <div class="baris" style="margin-top:8px"><span class="tombol garis mati">Ambil foto</span><span class="tombol garis">Ulangi</span></div>
+  </div>
+  <div class="baris"><span class="tombol">Absen Masuk</span><span class="tombol mati">Absen Pulang</span></div>
+</div></div>
+
+<div class="admin">
+  <header><div class="logo"><i>P</i>Admin Presensi</div><span class="btn" style="color:#0f1b2d">Keluar</span></header>
+  <main>
+    <div class="alat"><div class="seg"><span class="on">Harian</span><span>Bulanan</span></div><span class="inp">05/11/2026</span><span style="flex:1"></span><span class="btn">Ekspor CSV</span><span class="btn">Cetak</span></div>
+    <div class="angka"><div><small>Hadir</small><b>6/8</b></div><div><small>Tepat waktu</small><b>4</b></div><div><small>Telat</small><b>2</b></div><div><small>Belum hadir</small><b>2</b></div></div>
+    <table>
+      <thead><tr><th>ID</th><th>Nama</th><th>Masuk</th><th>Pulang</th><th>Status</th><th>Telat</th><th>Jarak</th><th>Foto</th></tr></thead>
+      <tbody id="baris"></tbody>
+    </table>
+  </main>
+</div>
+
+<script>
+  var data = [
+    ['K001','Budi Santoso','Staf Gudang','07:52','17:04','Tepat Waktu',0,24],
+    ['K002','Siti Rahma','Admin','07:48','17:10','Tepat Waktu',0,8],
+    ['K003','Andi Pratama','Kurir','08:23','17:01','Telat',23,61],
+    ['K004','Dewi Lestari','Kasir','07:58','','Tepat Waktu',0,15],
+    ['K005','Rizky Maulana','Teknisi','08:14','','Telat',14,47],
+    ['K006','Nur Aini','Keuangan','07:41','17:20','Tepat Waktu',0,11],
+    ['K007','Fajar Hidayat','Gudang','','','Belum hadir',0,''],
+    ['K008','Maya Sari','Marketing','','','Belum hadir',0,'']
+  ];
+  var warna = ['#c6f432','#60a5fa','#f59e0b','#f472b6','#34d399','#a78bfa'];
+  document.getElementById('baris').innerHTML = data.map(function (r, i) {
+    var k = r[5] === 'Tepat Waktu' ? 'tepat' : r[5] === 'Telat' ? 'telat' : 'absen';
+    var foto = r[3] ? '<svg class="foto" viewBox="0 0 26 26"><rect width="26" height="26" rx="7" fill="#16294a"/><circle cx="13" cy="10" r="5" fill="#e8b98c"/><path d="M4 26c1-7 5-9 9-9s8 2 9 9z" fill="' + warna[i % warna.length] + '"/></svg>' : '';
+    return '<tr><td>' + r[0] + '</td><td><b>' + r[1] + '</b><br><span style="color:#5b6b82;font-size:12px">' + r[2] + '</span></td><td>' + (r[3] || '-') + '</td><td>' + (r[4] || '-') + '</td><td><span class="st ' + k + '">' + r[5] + '</span></td><td>' + (r[6] ? r[6] + ' mnt' : '-') + '</td><td>' + (r[7] !== '' ? r[7] + ' m' : '-') + '</td><td>' + foto + '</td></tr>';
+  }).join('');
+</script>
+</body>
+</html>

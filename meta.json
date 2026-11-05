@@ -1,0 +1,27 @@
+{
+  "slug": "presensi-gps-gas",
+  "judul": "Presensi GPS + Selfie (Google Apps Script)",
+  "ringkas": "Absensi karyawan pakai GPS geofence dan selfie. Data masuk Google Sheets, foto ke Drive. Gratis tanpa server.",
+  "teknologi": ["Google Apps Script", "Google Sheets", "Google Drive", "HTML", "JavaScript", "Leaflet"],
+  "kategori": "Google Apps Script",
+  "tier": "gratis",
+  "fitur": [
+    "Absen masuk & pulang dari HP",
+    "Validasi radius kantor (haversine) di server",
+    "Selfie dari kamera, disimpan ke Google Drive",
+    "Cegah absen ganda di hari yang sama",
+    "Status tepat waktu, telat (menit), pulang cepat",
+    "Peta lokasi tanpa API key (Leaflet + OSM)",
+    "Halaman admin: rekap harian & bulanan",
+    "Ekspor CSV dan cetak rekap",
+    "Setup sheet otomatis sekali klik"
+  ],
+  "cara": [
+    "Buat Google Sheet baru, buka Ekstensi → Apps Script",
+    "Tempel Code.gs, index.html, admin.html",
+    "Jalankan fungsi setup() dan beri izin",
+    "Isi sheet Pengaturan (titik kantor, jam) & Karyawan",
+    "Deploy → Web app → akses: Siapa saja, bagikan link"
+  ],
+  "demo": "demo.html"
+}

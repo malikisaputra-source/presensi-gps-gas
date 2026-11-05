@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presensi</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root{--navy:#0b1f3a;--navy-2:#132c50;--lime:#c6f432;--lime-tua:#8db500;--merah:#ff5d5d;--teks:#e9eef7;--redup:#9fb0c9;--kartu:#10284a;--garis:#1f3c66;--radius:18px}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--navy);color:var(--teks);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  button,input{font:inherit}
+  [hidden]{display:none!important}
+  .wadah{max-width:460px;margin:0 auto;padding:18px 16px 32px}
+  .atas{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.01em}
+  .logo i{width:34px;height:34px;border-radius:10px;background:var(--lime);display:grid;place-items:center;color:var(--navy);font-style:normal;font-weight:900}
+  .jam{text-align:right}
+  .jam b{display:block;font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .jam small{color:var(--redup);font-size:12.5px}
+  .kartu{background:var(--kartu);border:1px solid var(--garis);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+  .kartu h2{margin:0 0 4px;font-size:18px}
+  .redup{color:var(--redup)} .kecil{font-size:13px}
+  label{display:block;font-size:13px;color:var(--redup);font-weight:600;margin:12px 0 6px}
+  input{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--garis);background:var(--navy);color:var(--teks)}
+  input:focus{outline:2px solid var(--lime);border-color:transparent}
+  .tombol{width:100%;padding:14px;border:0;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;background:var(--lime);color:var(--navy)}
+  .tombol:disabled{opacity:.4;cursor:not-allowed}
+  .tombol.garis{background:transparent;color:var(--teks);border:1px solid var(--garis)}
+  .salam{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .tautan{background:none;border:0;color:var(--lime);font-weight:700;cursor:pointer;padding:4px}
+  .status-hari{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .status-hari div{background:var(--navy);border-radius:12px;padding:10px 12px}
+  .status-hari small{color:var(--redup);font-size:12px}
+  .status-hari b{display:block;font-size:16px}
+  .peta{height:200px;border-radius:14px;overflow:hidden;background:var(--navy-2);position:relative}
+  .lokasi-info{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px}
+  .lencana{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:13px;font-weight:700;background:var(--navy)}
+  .lencana::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--redup)}
+  .lencana.ok{color:var(--lime)} .lencana.ok::before{background:var(--lime)}
+  .lencana.jauh{color:var(--merah)} .lencana.jauh::before{background:var(--merah)}
+  .kamera{position:relative;aspect-ratio:3/4;max-height:380px;width:100%;border-radius:14px;overflow:hidden;background:#06142a;display:grid;place-items:center}
+  .kamera video,.kamera img{width:100%;height:100%;object-fit:cover}
+  .kamera video{transform:scaleX(-1)}
+  .bingkai{position:absolute;inset:12% 18%;border:2px dashed rgba(198,244,50,.6);border-radius:50% 50% 46% 46%;pointer-events:none}
+  .kamera .info{position:absolute;color:var(--redup);text-align:center;padding:20px}
+  .baris-tombol{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .hasil{position:fixed;inset:0;background:rgba(5,14,30,.86);display:grid;place-items:center;padding:20px;z-index:1000}
+  .hasil .kartu{max-width:360px;width:100%;text-align:center;padding:26px 20px}
+  .ikon-hasil{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:30px;font-weight:900;background:var(--lime);color:var(--navy)}
+  .ikon-hasil.gagal{background:var(--merah);color:#fff}
+  .memuat{display:inline-block;width:18px;height:18px;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:putar .7s linear infinite;vertical-align:-3px}
+  @keyframes putar{to{transform:rotate(360deg)}}
+  .leaflet-container{background:var(--navy-2)}
+</style>
+</head>
+<body>
+<div class="wadah">
+  <header class="atas">
+    <div class="logo"><i>P</i><span id="namaKantor">Presensi</span></div>
+    <div class="jam"><b id="jam">--:--:--</b><small id="tanggal">-</small></div>
+  </header>
+
+  <!-- Masuk -->
+  <section id="layarLogin" class="kartu">
+    <h2>Halo! Silakan masuk</h2>
+    <p class="redup kecil" style="margin:0">Pakai ID karyawan dan PIN dari admin.</p>
+    <form id="formLogin">
+      <label for="inId">ID Karyawan</label>
+      <input id="inId" autocomplete="username" placeholder="contoh: K001" required>
+      <label for="inPin">PIN</label>
+      <input id="inPin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="••••" required>
+      <p id="pesanLogin" class="kecil" style="color:var(--merah);min-height:20px"></p>
+      <button class="tombol" id="btnLogin">Masuk</button>
+    </form>
+  </section>
+
+  <!-- Presensi -->
+  <section id="layarAbsen" hidden>
+    <div class="kartu">
+      <div class="salam">
+        <div><h2 id="namaKaryawan">-</h2><span class="redup kecil" id="jabatan">-</span></div>
+        <button class="tautan" id="btnKeluar">Ganti akun</button>
+      </div>
+      <div class="status-hari">
+        <div><small>Masuk</small><b id="stMasuk">Belum</b></div>
+        <div><small>Pulang</small><b id="stPulang">Belum</b></div>
+      </div>
+    </div>
+
+    <div class="kartu">
+      <div id="peta" class="peta"></div>
+      <div class="lokasi-info">
+        <span class="lencana" id="lencanaLokasi">Mencari lokasi…</span>
+        <button class="tautan" id="btnUlangLokasi">Perbarui</button>
+      </div>
+    </div>
+
+    <div class="kartu">
+      <div class="kamera" id="kamera">
+        <video id="video" playsinline autoplay muted hidden></video>
+        <img id="foto" alt="Foto selfie" hidden>
+        <div class="bingkai" id="bingkai" hidden></div>
+        <div class="info" id="infoKamera">Kamera belum aktif.<br><br><button class="tombol garis" id="btnKamera" type="button" style="width:auto;padding:10px 16px">Nyalakan kamera</button></div>
+      </div>
+      <div class="baris-tombol" id="aksiKamera" hidden>
+        <button class="tombol garis" id="btnFoto" type="button">Ambil foto</button>
+        <button class="tombol garis" id="btnUlangFoto" type="button" disabled>Ulangi</button>
+      </div>
+    </div>
+
+    <div class="baris-tombol">
+      <button class="tombol" id="btnMasuk" disabled>Absen Masuk</button>
+      <button class="tombol" id="btnPulang" disabled>Absen Pulang</button>
+    </div>
+    <p class="redup kecil" style="text-align:center;margin-top:12px" id="petunjuk">Pastikan lokasi dalam radius dan foto sudah diambil.</p>
+  </section>
+</div>
+
+<div class="hasil" id="hasil" hidden>
+  <div class="kartu">
+    <div class="ikon-hasil" id="ikonHasil">✓</div>
+    <h2 id="judulHasil">Berhasil</h2>
+    <p class="redup" id="isiHasil"></p>
+    <button class="tombol" id="btnTutupHasil">Oke</button>
+  </div>
+</div>
+
+<canvas id="kanvas" hidden></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var INFO = null, AKUN = null, POS = null, FOTO = '', stream = null, peta, penanda, akurasiLingkar;
+
+  // jam
+  function tik(){ var d=new Date(); $('jam').textContent=d.toLocaleTimeString('id-ID',{hour12:false}); $('tanggal').textContent=d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'}); }
+  tik(); setInterval(tik,1000);
+
+  function server(fn, args){
+    return new Promise(function(ok, gagal){
+      var r = google.script.run.withSuccessHandler(ok).withFailureHandler(function(e){ gagal(e && e.message || String(e)); });
+      r[fn].apply(r, args || []);
+    });
+  }
+  function haversine(a,b,c,d){ var R=6371000,r=Math.PI/180,x=(c-a)*r,y=(d-b)*r,h=Math.sin(x/2)*Math.sin(x/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)*Math.sin(y/2); return 2*R*Math.asin(Math.min(1,Math.sqrt(h))); }
+
+  function tampilHasil(ok, judul, isi){
+    $('ikonHasil').textContent = ok ? '✓' : '!';
+    $('ikonHasil').className = 'ikon-hasil' + (ok ? '' : ' gagal');
+    $('judulHasil').textContent = judul; $('isiHasil').textContent = isi; $('hasil').hidden = false;
+  }
+  $('btnTutupHasil').onclick = function(){ $('hasil').hidden = true; };
+
+  // --- login ---
+  try { $('inId').value = localStorage.getItem('presensi-id') || ''; } catch(e){}
+  server('getInfo').then(function(i){ INFO = i; $('namaKantor').textContent = i.kantor || 'Presensi'; }).catch(function(e){ $('pesanLogin').textContent = e; });
+
+  $('formLogin').onsubmit = function(e){
+    e.preventDefault();
+    var id = $('inId').value.trim(), pin = $('inPin').value.trim();
+    $('btnLogin').disabled = true; $('btnLogin').innerHTML = '<span class="memuat"></span>';
+    server('cekKaryawan',[id,pin]).then(function(r){
+      if (r.error) { $('pesanLogin').textContent = r.error; return; }
+      AKUN = { id:r.id, pin:pin, nama:r.nama };
+      try { localStorage.setItem('presensi-id', r.id); } catch(e){}
+      $('namaKaryawan').textContent = r.nama; $('jabatan').textContent = r.jabatan + ' · ' + r.id;
+      setStatus(r.hariIni);
+      $('layarLogin').hidden = true; $('layarAbsen').hidden = false;
+      mulaiPeta(); ambilLokasi();
+    }).catch(function(e){ $('pesanLogin').textContent = e; })
+      .then(function(){ $('btnLogin').disabled = false; $('btnLogin').textContent = 'Masuk'; });
+  };
+  $('btnKeluar').onclick = function(){ location.reload(); };
+
+  var HARI = [];
+  function setStatus(list){ HARI = list || []; $('stMasuk').textContent = HARI.indexOf('Masuk')>-1 ? 'Sudah ✓' : 'Belum'; $('stPulang').textContent = HARI.indexOf('Pulang')>-1 ? 'Sudah ✓' : 'Belum'; cekTombol(); }
+
+  // --- peta & lokasi ---
+  function mulaiPeta(){
+    if (peta || !window.L || !INFO) return;
+    peta = L.map('peta',{zoomControl:false,attributionControl:true}).setView([INFO.lat, INFO.lng], 17);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(peta);
+    L.circle([INFO.lat, INFO.lng],{radius:INFO.radius,color:'#c6f432',weight:2,fillOpacity:.12}).addTo(peta);
+    L.circleMarker([INFO.lat, INFO.lng],{radius:6,color:'#0b1f3a',fillColor:'#c6f432',fillOpacity:1,weight:2}).addTo(peta).bindTooltip(INFO.kantor);
+  }
+  function ambilLokasi(){
+    var l = $('lencanaLokasi'); l.className = 'lencana'; l.textContent = 'Mencari lokasi…';
+    if (!navigator.geolocation) { l.textContent = 'GPS tidak didukung'; return; }
+    navigator.geolocation.getCurrentPosition(function(p){
+      POS = { lat:p.coords.latitude, lng:p.coords.longitude, akurasi:p.coords.accuracy };
+      var jarak = INFO ? haversine(INFO.lat, INFO.lng, POS.lat, POS.lng) : 0;
+      var dalam = INFO && jarak <= INFO.radius;
+      l.className = 'lencana ' + (dalam ? 'ok' : 'jauh');
+      l.textContent = (dalam ? 'Dalam radius' : 'Di luar radius') + ' · ' + Math.round(jarak) + ' m (±' + Math.round(POS.akurasi) + ' m)';
+      if (peta) {
+        var ll = [POS.lat, POS.lng];
+        if (!penanda) { penanda = L.circleMarker(ll,{radius:8,color:'#fff',weight:3,fillColor:'#3b82f6',fillOpacity:1}).addTo(peta); akurasiLingkar = L.circle(ll,{radius:POS.akurasi,color:'#3b82f6',weight:1,fillOpacity:.1}).addTo(peta); }
+        else { penanda.setLatLng(ll); akurasiLingkar.setLatLng(ll).setRadius(POS.akurasi); }
+        peta.fitBounds(L.latLngBounds([ll,[INFO.lat,INFO.lng]]).pad(.6),{maxZoom:18});
+      }
+      cekTombol();
+    }, function(err){
+      l.className = 'lencana jauh';
+      l.textContent = err.code === 1 ? 'Izin lokasi ditolak' : 'Lokasi gagal dibaca';
+    }, { enableHighAccuracy:true, timeout:20000, maximumAge:0 });
+  }
+  $('btnUlangLokasi').onclick = ambilLokasi;
+
+  // --- kamera ---
+  $('btnKamera').onclick = function(){
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { $('infoKamera').textContent = 'Browser tidak mendukung kamera.'; return; }
+    navigator.mediaDevices.getUserMedia({ video:{ facingMode:'user', width:{ideal:720}, height:{ideal:960} }, audio:false })
+      .then(function(s){ stream = s; var v = $('video'); v.srcObject = s; v.hidden = false; $('bingkai').hidden = false; $('infoKamera').hidden = true; $('aksiKamera').hidden = false; })
+      .catch(function(){ $('infoKamera').innerHTML = 'Izin kamera ditolak.<br>Buka pengaturan situs lalu izinkan kamera.'; });
+  };
+  $('btnFoto').onclick = function(){
+    var v = $('video'), c = $('kanvas'), lebar = 480, tinggi = Math.round(lebar * (v.videoHeight / v.videoWidth || 4/3));
+    c.width = lebar; c.height = tinggi;
+    var x = c.getContext('2d'); x.translate(lebar,0); x.scale(-1,1); x.drawImage(v,0,0,lebar,tinggi);
+    x.setTransform(1,0,0,1,0,0); x.fillStyle = 'rgba(0,0,0,.55)'; x.fillRect(0,tinggi-28,lebar,28);
+    x.fillStyle = '#fff'; x.font = '14px sans-serif'; x.fillText(new Date().toLocaleString('id-ID') + (AKUN ? ' · ' + AKUN.id : ''), 10, tinggi-9);
+    FOTO = c.toDataURL('image/jpeg', .72);
+    $('foto').src = FOTO; $('foto').hidden = false; v.hidden = true; $('bingkai').hidden = true;
+    $('btnFoto').disabled = true; $('btnUlangFoto').disabled = false; cekTombol();
+  };
+  $('btnUlangFoto').onclick = function(){ FOTO=''; $('foto').hidden = true; $('video').hidden = false; $('bingkai').hidden = false; $('btnFoto').disabled = false; $('btnUlangFoto').disabled = true; cekTombol(); };
+
+  function cekTombol(){
+    var siap = POS && (!INFO || !INFO.wajibFoto || FOTO);
+    $('btnMasuk').disabled = !siap || HARI.indexOf('Masuk')>-1;
+    $('btnPulang').disabled = !siap || HARI.indexOf('Masuk')<0 || HARI.indexOf('Pulang')>-1;
+  }
+
+  function kirim(jenis){
+    var b = jenis === 'Masuk' ? $('btnMasuk') : $('btnPulang'), teks = b.textContent;
+    b.disabled = true; b.innerHTML = '<span class="memuat"></span>';
+    server('absen',[{ id:AKUN.id, pin:AKUN.pin, jenis:jenis, lat:POS.lat, lng:POS.lng, akurasi:POS.akurasi, foto:FOTO, perangkat:navigator.userAgent }])
+      .then(function(r){
+        if (!r.ok) return tampilHasil(false,'Belum bisa absen', r.pesan);
+        HARI.push(jenis); setStatus(HARI);
+        tampilHasil(true, jenis + ' tercatat ' + r.jam, r.nama + ' · ' + r.status + (r.telat ? ' (' + r.telat + ' menit)' : '') + ' · ' + r.jarak + ' m dari kantor');
+        if (stream) { stream.getTracks().forEach(function(t){ t.stop(); }); stream = null; }
+      })
+      .catch(function(e){ tampilHasil(false,'Gagal terhubung', e); })
+      .then(function(){ b.textContent = teks; cekTombol(); });
+  }
+  $('btnMasuk').onclick = function(){ kirim('Masuk'); };
+  $('btnPulang').onclick = function(){ kirim('Pulang'); };
+})();
+</script>
+</body>
+</html>

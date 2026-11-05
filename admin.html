@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Presensi</title>
+<style>
+  :root{--navy:#0b1f3a;--lime:#c6f432;--latar:#f3f5f9;--kartu:#fff;--teks:#0f1b2d;--redup:#5b6b82;--garis:#e1e6ee;--merah:#d93a3a;--kuning:#b7791f;--hijau:#2f855a}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--latar);color:var(--teks);font:14.5px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  button,input{font:inherit}
+  [hidden]{display:none!important}
+  header{background:var(--navy);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800}
+  .logo i{width:32px;height:32px;border-radius:9px;background:var(--lime);display:grid;place-items:center;color:var(--navy);font-style:normal;font-weight:900}
+  main{max-width:1100px;margin:0 auto;padding:20px}
+  .kartu{background:var(--kartu);border:1px solid var(--garis);border-radius:16px;padding:18px}
+  .masuk{max-width:380px;margin:40px auto}
+  input{padding:10px 12px;border:1px solid var(--garis);border-radius:10px;background:#fff;color:var(--teks)}
+  .tombol{padding:10px 16px;border-radius:10px;border:1px solid var(--garis);background:#fff;font-weight:700;cursor:pointer;color:var(--teks)}
+  .tombol.utama{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .alat{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  .segmen{display:inline-flex;background:#fff;border:1px solid var(--garis);border-radius:10px;padding:3px}
+  .segmen button{border:0;background:none;padding:7px 14px;border-radius:8px;font-weight:700;cursor:pointer;color:var(--redup)}
+  .segmen button.aktif{background:var(--navy);color:#fff}
+  .ruang{flex:1}
+  .angka{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  .angka div{background:#fff;border:1px solid var(--garis);border-radius:14px;padding:14px 16px}
+  .angka small{color:var(--redup);font-weight:600}
+  .angka b{display:block;font-size:26px}
+  .angka div:first-child{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .angka div:first-child small{color:var(--lime)}
+  .bungkus{background:#fff;border:1px solid var(--garis);border-radius:16px;overflow:auto}
+  table{width:100%;border-collapse:collapse;min-width:640px}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--garis)}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--redup);background:#fafbfd}
+  tr:last-child td{border-bottom:0}
+  .st{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:700;background:#edf2f7;color:var(--redup)}
+  .st.tepat{background:#e6f6ec;color:var(--hijau)} .st.telat{background:#fdf3e1;color:var(--kuning)} .st.absen{background:#fdeaea;color:var(--merah)}
+  a{color:#2b6cb0;font-weight:600}
+  .redup{color:var(--redup)}
+  @media (max-width:720px){ .angka{grid-template-columns:repeat(2,1fr)} main{padding:14px} .ruang{display:none} }
+  @media print{ header .tombol,.alat{display:none} body{background:#fff} }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><i>P</i><span>Admin Presensi</span></div>
+  <button class="tombol" id="btnKeluar" hidden>Keluar</button>
+</header>
+<main>
+  <form class="kartu masuk" id="formKunci">
+    <h2 style="margin-top:0">Masuk admin</h2>
+    <p class="redup">Masukkan <b>kunci_admin</b> dari sheet Pengaturan.</p>
+    <input type="password" id="inKunci" autocomplete="current-password" placeholder="Kunci admin" required style="width:100%">
+    <p id="pesan" style="color:var(--merah);min-height:20px"></p>
+    <button class="tombol utama" style="width:100%">Buka rekap</button>
+  </form>
+
+  <section id="panel" hidden>
+    <div class="alat">
+      <div class="segmen" id="seg"><button type="button" data-m="hari" class="aktif">Harian</button><button type="button" data-m="bulan">Bulanan</button></div>
+      <input type="date" id="inTgl"><input type="month" id="inBln" hidden>
+      <span class="ruang"></span>
+      <button class="tombol" id="btnCsv">Ekspor CSV</button>
+      <button class="tombol" onclick="window.print()">Cetak</button>
+    </div>
+    <div class="angka" id="angka"></div>
+    <div class="bungkus"><table id="tabel"></table></div>
+    <p class="redup" id="info" style="font-size:13px"></p>
+  </section>
+</main>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var KUNCI = '', MODE = 'hari';
+  function dua(n){ return (n<10?'0':'')+n; }
+  var d = new Date(); $('inTgl').value = d.getFullYear()+'-'+dua(d.getMonth()+1)+'-'+dua(d.getDate()); $('inBln').value = $('inTgl').value.slice(0,7);
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function server(fn,args){ return new Promise(function(ok,no){ var r=google.script.run.withSuccessHandler(ok).withFailureHandler(function(e){no(e&&e.message||String(e));}); r[fn].apply(r,args); }); }
+  function nilai(){ return MODE==='hari' ? $('inTgl').value : $('inBln').value; }
+  function kelas(s){ return s==='Tepat Waktu'?'tepat':s==='Telat'?'telat':s==='Belum hadir'?'absen':''; }
+
+  function muat(){
+    $('info').textContent = 'Memuat…';
+    return server('rekap',[KUNCI, MODE, nilai()]).then(render);
+  }
+  function render(r){
+    var b = r.baris;
+    if (r.mode==='hari'){
+      var hadir=b.filter(function(x){return x.masuk;}).length, telat=b.filter(function(x){return x.status==='Telat';}).length;
+      $('angka').innerHTML='<div><small>Hadir</small><b>'+hadir+'/'+b.length+'</b></div><div><small>Tepat waktu</small><b>'+(hadir-telat)+'</b></div><div><small>Telat</small><b>'+telat+'</b></div><div><small>Belum hadir</small><b>'+(b.length-hadir)+'</b></div>';
+      $('tabel').innerHTML='<thead><tr><th>ID</th><th>Nama</th><th>Masuk</th><th>Pulang</th><th>Status</th><th>Telat</th><th>Jarak</th><th>Foto</th></tr></thead><tbody>'+b.map(function(x){
+        return '<tr><td>'+esc(x.id)+'</td><td><b>'+esc(x.nama)+'</b><br><span class="redup">'+esc(x.jabatan)+'</span></td><td>'+(x.masuk||'-')+'</td><td>'+(x.pulang||'-')+'</td><td><span class="st '+kelas(x.status)+'">'+esc(x.status)+'</span></td><td>'+(x.telat?x.telat+' mnt':'-')+'</td><td>'+(x.jarak!==''?x.jarak+' m':'-')+'</td><td>'+(x.foto?'<a href="'+esc(x.foto)+'" target="_blank" rel="noopener">Masuk</a>':'')+(x.fotoPulang?' · <a href="'+esc(x.fotoPulang)+'" target="_blank" rel="noopener">Pulang</a>':'')+'</td></tr>';
+      }).join('')+'</tbody>';
+    } else {
+      var tot=b.reduce(function(s,x){return s+x.hadir;},0), tl=b.reduce(function(s,x){return s+x.telat;},0);
+      $('angka').innerHTML='<div><small>Total kehadiran</small><b>'+tot+'</b></div><div><small>Tepat waktu</small><b>'+(tot-tl)+'</b></div><div><small>Telat</small><b>'+tl+'</b></div><div><small>Karyawan</small><b>'+b.length+'</b></div>';
+      $('tabel').innerHTML='<thead><tr><th>ID</th><th>Nama</th><th>Hadir</th><th>Tepat</th><th>Telat</th><th>Total telat</th><th>Pulang cepat</th></tr></thead><tbody>'+b.map(function(x){
+        return '<tr><td>'+esc(x.id)+'</td><td><b>'+esc(x.nama)+'</b><br><span class="redup">'+esc(x.jabatan)+'</span></td><td>'+x.hadir+' hari</td><td>'+x.tepat+'</td><td>'+x.telat+'</td><td>'+x.totalTelat+' mnt</td><td>'+x.pulangCepat+'</td></tr>';
+      }).join('')+'</tbody>';
+    }
+    $('info').textContent = 'Diperbarui '+new Date().toLocaleTimeString('id-ID');
+  }
+
+  $('formKunci').onsubmit=function(e){ e.preventDefault(); KUNCI=$('inKunci').value; muat().then(function(){ $('formKunci').hidden=true; $('panel').hidden=false; $('btnKeluar').hidden=false; }).catch(function(er){ $('pesan').textContent=er; }); };
+  $('btnKeluar').onclick=function(){ location.reload(); };
+  $('seg').onclick=function(e){ var t=e.target.closest('button'); if(!t) return; MODE=t.dataset.m; Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('aktif',x===t);}); $('inTgl').hidden=MODE!=='hari'; $('inBln').hidden=MODE!=='bulan'; muat().catch(alert); };
+  $('inTgl').onchange=$('inBln').onchange=function(){ muat().catch(alert); };
+  $('btnCsv').onclick=function(){
+    server('dataMentah',[KUNCI,MODE,nilai()]).then(function(rows){
+      var csv='﻿'+rows.map(function(r){return r.map(function(v){v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(',');}).join('\n');
+      var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='presensi-'+nilai()+'.csv'; document.body.appendChild(a); a.click(); a.remove();
+    }).catch(alert);
+  };
+})();
+</script>
+</body>
+</html>
