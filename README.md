@@ -85,7 +85,7 @@ presensi-gps-gas/
 - Nama kantor diambil dari sheet `Pengaturan`.
 
 ## Lisensi
-MIT — bebas dipakai dan dimodifikasi, asal menyertakan berkas LICENSE.
+MIT + syarat tambahan (lihat `LICENSE`): gratis dipakai untuk usaha/organisasi sendiri dan boleh diubah, **wajib mencantumkan kreator** (Template oleh Maliki Saputra, @malikisaputra), dan **tidak boleh diperjualbelikan** tanpa izin. Mau menjual atau kerja sama? Diskusikan dulu dengan kreatornya.
 
 ---
 Dibuat oleh **Maliki Studio** — [malikisaputra.biz.id](https://malikisaputra.biz.id), follow TikTok/IG **@malikisaputra**
@@ -134,6 +134,6 @@ Kamu tidak perlu jago coding. Template ini sudah disiapkan supaya mudah diubah A
 - Simpan salinan folder asli sebelum mengubah, jadi bisa balik kalau ada yang rusak.
 - Kalau ada error, salin pesan errornya (klik kanan > Inspect > Console) lalu tempel ke AI.
 - Data aplikasi tersimpan di browser (localStorage). Backup dulu sebelum ganti versi.
-- Jangan hapus kredit "Template oleh @malikisaputra". Itu syarat lisensinya.
+- Jangan hapus kredit "Template oleh @malikisaputra", dan template ini **tidak boleh diperjualbelikan** tanpa izin. Mau menjual atau kerja sama? Diskusikan dulu dengan kreatornya (@malikisaputra).
 
 Masih bingung? Komen di TikTok/IG **@malikisaputra**, nanti aku bantu.

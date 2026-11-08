@@ -21,14 +21,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ---------------------------------------------------------------------------
-SYARAT ATRIBUSI / ATTRIBUTION REQUIREMENT (kredit-maliki)
+SYARAT TAMBAHAN / ADDITIONAL TERMS (kredit-maliki)
+Syarat ini menambah lisensi MIT di atas. Bila bertentangan, syarat ini yang berlaku.
 
-Kredit "Template oleh Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id"
-pada tampilan (footer), komentar di kepala berkas kode, dan berkas ini
-WAJIB dipertahankan di setiap salinan, modifikasi, atau karya turunan,
-termasuk yang dipakai untuk klien atau dijual kembali. Menghapus kredit
-berarti melanggar lisensi ini.
+1. ATRIBUSI. Kredit "Template oleh Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id"
+   pada tampilan (footer), komentar di kepala berkas kode, dan berkas ini
+   WAJIB dipertahankan di setiap salinan, modifikasi, atau karya turunan.
+2. TIDAK UNTUK DIPERJUALBELIKAN. Template/kode ini (asli maupun yang diubah)
+   TIDAK BOLEH dijual, dijual ulang, atau dibagikan berbayar (misalnya sebagai
+   template, paket source code, aset, atau bahan kursus) tanpa izin tertulis
+   dari kreator. Mau menjual atau kerja sama? Hubungi dulu Maliki Saputra
+   lewat TikTok/IG @malikisaputra atau https://malikisaputra.biz.id untuk berdiskusi.
+3. Boleh dipakai gratis untuk usaha/organisasi sendiri dan dipelajari.
 
-The credit notice above, in the visible footer, the source file headers
-and this file MUST be retained in all copies, modifications and derivative
-works, including client and commercial use. Removing it violates this license.
+1. ATTRIBUTION. The credit notice above, in the visible footer, source file
+   headers and this file MUST be retained in all copies and derivative works.
+2. NOT FOR SALE. This template/code, original or modified, MAY NOT be sold,
+   resold or distributed for a fee without written permission from the
+   creator. Contact @malikisaputra first to discuss.
