@@ -43,11 +43,12 @@
   .redup{color:var(--redup)}
   @media (max-width:720px){ .angka{grid-template-columns:repeat(2,1fr)} main{padding:14px} .ruang{display:none} }
   @media print{ header .tombol,.alat{display:none} body{background:#fff} }
+  .logo-img[hidden]{display:none}.logo-img{height:34px;max-width:120px;object-fit:contain;border-radius:8px}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo"><i>P</i><span>Admin Presensi</span></div>
+  <div class="logo"><img class="logo-img" src="<?= logoUrl ?>" alt="Logo" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()"><i><?= logoInisial ?></i><span>Admin Presensi</span></div>
   <button class="tombol" id="btnKeluar" hidden>Keluar</button>
 </header>
 <main>

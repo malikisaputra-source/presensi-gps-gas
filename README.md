@@ -95,6 +95,15 @@ Dibuat oleh **Maliki Studio** — [malikisaputra.biz.id](https://malikisaputra.b
 <!-- kredit-maliki -->
 **Kredit:** Template oleh Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id. Kredit di footer & kepala berkas wajib dipertahankan (lihat LICENSE).
 
+## Ganti logo & foto
+Apps Script tidak bisa melayani berkas gambar lokal, jadi logo diambil dari URL.
+1. Unggah logo (PNG/SVG, rasio 1:1 atau melebar ±3:1) ke Google Drive → Bagikan → **Siapa saja yang memiliki link**, salin link-nya. Atau pakai URL gambar publik lain (mis. dari situs instansimu).
+2. Buka `Code.gs`, isi `var LOGO_URL = '...';` dengan link tadi (link Drive otomatis diubah ke format gambar). Ubah `LOGO_INISIAL` untuk huruf cadangan.
+3. Simpan, lalu **Deploy → Manage deployments → Edit → New version** agar perubahan tampil.
+- Logo tampil di halaman presensi, halaman admin, dan ikut tercetak di rekap. Bila URL kosong/gagal dimuat, otomatis kembali ke inisial.
+- `img/logo-instansi.svg` hanya contoh untuk `demo.html`; timpa berkas itu untuk mencoba tampilan demo.
+- Foto selfie karyawan sudah otomatis tersimpan di folder Drive (lihat kolom `Foto` di sheet Presensi).
+
 <!-- panduan-ai-maliki -->
 ## Ubah sendiri sesuai kebutuhanmu pakai AI
 

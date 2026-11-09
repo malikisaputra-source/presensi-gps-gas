@@ -11,6 +11,18 @@ var SHEET_PRESENSI = 'Presensi';
 var SHEET_PENGATURAN = 'Pengaturan';
 var KOLOM_PRESENSI = ['Waktu', 'Tanggal', 'ID', 'Nama', 'Jenis', 'Status', 'Telat (menit)', 'Jarak (m)', 'Akurasi (m)', 'Latitude', 'Longitude', 'Foto', 'Perangkat'];
 
+// ===================== Logo instansi =====================
+// Satu-satunya tempat mengatur logo. Isi URL gambar publik (https://...png/svg)
+// atau link berbagi Google Drive ("Siapa saja yang memiliki link"). Kosong = pakai inisial.
+var LOGO_URL = '';
+var LOGO_INISIAL = 'P';
+
+function logoUrl_() {
+  var u = String(LOGO_URL || '').trim();
+  var m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]+)/);
+  return m ? 'https://lh3.googleusercontent.com/d/' + m[1] : u;
+}
+
 var PENGATURAN_AWAL = [
   ['nama_kantor', 'Kantor Pusat', 'Nama lokasi yang tampil di aplikasi'],
   ['lat_kantor', '-6.917464', 'Latitude titik kantor (klik kanan di Google Maps untuk menyalin)'],
@@ -30,6 +42,8 @@ function doGet(e) {
   var page = (e && e.parameter && e.parameter.page) || 'index';
   var file = page === 'admin' ? 'admin' : 'index';
   var t = HtmlService.createTemplateFromFile(file);
+  t.logoUrl = logoUrl_();
+  t.logoInisial = LOGO_INISIAL;
   return t.evaluate()
     .setTitle(page === 'admin' ? 'Admin Presensi' : 'Presensi')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')

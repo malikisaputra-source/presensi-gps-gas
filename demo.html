@@ -51,13 +51,14 @@
   .tepat{background:#e6f6ec;color:#2f855a}.telat{background:#fdf3e1;color:#b7791f}.absen{background:#fdeaea;color:#d93a3a}
   .foto{width:26px;height:26px;border-radius:7px;vertical-align:middle}
   .label-demo{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--navy);font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px}
+  .logo-img[hidden]{display:none}.logo-img{height:30px;max-width:110px;object-fit:contain;border-radius:8px}
 </style>
 </head>
 <body>
 <span class="label-demo">DEMO · data contoh</span>
 
 <div class="hp"><div class="hp-isi">
-  <div class="atas"><div class="logo"><i>P</i>Kantor Pusat</div><div class="jam"><b id="jam">07:56:12</b><small>Kamis, 5 November</small></div></div>
+  <div class="atas"><div class="logo"><img class="logo-img" src="img/logo-instansi.svg" alt="Logo" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()"><i>P</i>Kantor Pusat</div><div class="jam"><b id="jam">07:56:12</b><small>Kamis, 5 November</small></div></div>
   <div class="kartu">
     <div class="salam"><div><h2>Budi Santoso</h2><span class="redup kecil">Staf Gudang · K001</span></div><span class="tautan">Ganti akun</span></div>
     <div class="status-hari"><div><small>Masuk</small><b>Belum</b></div><div><small>Pulang</small><b>Belum</b></div></div>
@@ -97,7 +98,7 @@
 </div></div>
 
 <div class="admin">
-  <header><div class="logo"><i>P</i>Admin Presensi</div><span class="btn" style="color:#0f1b2d">Keluar</span></header>
+  <header><div class="logo"><img class="logo-img" src="img/logo-instansi.svg" alt="Logo" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()"><i>P</i>Admin Presensi</div><span class="btn" style="color:#0f1b2d">Keluar</span></header>
   <main>
     <div class="alat"><div class="seg"><span class="on">Harian</span><span>Bulanan</span></div><span class="inp">05/11/2026</span><span style="flex:1"></span><span class="btn">Ekspor CSV</span><span class="btn">Cetak</span></div>
     <div class="angka"><div><small>Hadir</small><b>6/8</b></div><div><small>Tepat waktu</small><b>4</b></div><div><small>Telat</small><b>2</b></div><div><small>Belum hadir</small><b>2</b></div></div>

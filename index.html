@@ -54,12 +54,13 @@
   .memuat{display:inline-block;width:18px;height:18px;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:putar .7s linear infinite;vertical-align:-3px}
   @keyframes putar{to{transform:rotate(360deg)}}
   .leaflet-container{background:var(--navy-2)}
+  .logo-img[hidden]{display:none}.logo-img{height:34px;max-width:120px;object-fit:contain;border-radius:8px}
 </style>
 </head>
 <body>
 <div class="wadah">
   <header class="atas">
-    <div class="logo"><i>P</i><span id="namaKantor">Presensi</span></div>
+    <div class="logo"><img class="logo-img" src="<?= logoUrl ?>" alt="Logo" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()"><i><?= logoInisial ?></i><span id="namaKantor">Presensi</span></div>
     <div class="jam"><b id="jam">--:--:--</b><small id="tanggal">-</small></div>
   </header>
 
