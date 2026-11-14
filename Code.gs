@@ -1,6 +1,6 @@
 /**
  * Presensi GPS + Selfie — Google Apps Script
- * Maliki Studio (malikisaputra.biz.id) · Lisensi MIT
+ * Maliki Studio (malikisaputra.biz.id) · Lisensi Nonkomersial Maliki Studio
  *
  * Langkah singkat: jalankan setup() sekali, isi sheet "Pengaturan" & "Karyawan",
  * lalu Deploy → New deployment → Web app. Detail ada di README.md.

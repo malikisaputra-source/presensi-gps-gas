@@ -1,41 +1,50 @@
-MIT License
+LISENSI NONKOMERSIAL MALIKI STUDIO 1.0
+Hak cipta (c) 2026 Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id
+kredit-maliki: Template oleh Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id
 
-Copyright (c) 2026 Maliki Saputra
+Template, source code, desain, dan aset di repositori/paket ini ("Karya") dibagikan
+GRATIS oleh Maliki Saputra ("Kreator"). Dengan mengunduh, menyalin, atau memakai Karya,
+kamu setuju dengan syarat berikut.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. BOLEH (gratis)
+   a. Memakai Karya untuk belajar, keperluan pribadi, atau operasional usaha,
+      sekolah, komunitas, atau organisasimu SENDIRI.
+   b. Mengubah, menerjemahkan, dan menyesuaikan Karya untuk keperluan di atas.
+   c. Membagikan Karya secara GRATIS kepada orang lain, asal kredit dan lisensi
+      ini ikut utuh dan tautan ke sumber aslinya disertakan.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. TIDAK BOLEH (tanpa izin tertulis Kreator)
+   a. Menjual, menjual ulang, menyewakan, atau membagikan Karya secara berbayar,
+      baik asli maupun yang sudah diubah — termasuk sebagai template, paket
+      source code, aset digital, tema, plugin, atau bahan kelas/kursus.
+   b. Memakai Karya untuk jasa berbayar kepada pihak lain (misalnya membuatkan
+      website/aplikasi/video untuk klien dengan bayaran memakai Karya ini).
+   c. Mengunggah Karya ke marketplace, toko digital, atau platform berbayar.
+   d. Menghapus, menyembunyikan, atau mengganti kredit Kreator.
+   e. Mengaku Karya sebagai buatan sendiri.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+3. KREDIT WAJIB
+   Kredit "Template oleh Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id"
+   pada tampilan (footer/akhir video), komentar di kepala berkas kode, README, dan
+   berkas LICENSE ini WAJIB dipertahankan di setiap salinan dan karya turunan.
+
+4. MAU MEMAKAI SECARA KOMERSIAL?
+   Hubungi Kreator lewat TikTok/Instagram @malikisaputra atau
+   https://malikisaputra.biz.id untuk izin atau kerja sama.
+
+5. TANPA JAMINAN
+   Karya diberikan "SEBAGAIMANA ADANYA", tanpa jaminan apa pun. Kreator tidak
+   bertanggung jawab atas kerugian yang timbul dari pemakaian Karya. Pustaka pihak
+   ketiga di dalamnya tetap mengikuti lisensinya masing-masing.
+
+Pelanggaran syarat di atas mengakhiri izinmu memakai Karya.
 
 ---------------------------------------------------------------------------
-SYARAT TAMBAHAN / ADDITIONAL TERMS (kredit-maliki)
-Syarat ini menambah lisensi MIT di atas. Bila bertentangan, syarat ini yang berlaku.
-
-1. ATRIBUSI. Kredit "Template oleh Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id"
-   pada tampilan (footer), komentar di kepala berkas kode, dan berkas ini
-   WAJIB dipertahankan di setiap salinan, modifikasi, atau karya turunan.
-2. TIDAK UNTUK DIPERJUALBELIKAN. Template/kode ini (asli maupun yang diubah)
-   TIDAK BOLEH dijual, dijual ulang, atau dibagikan berbayar (misalnya sebagai
-   template, paket source code, aset, atau bahan kursus) tanpa izin tertulis
-   dari kreator. Mau menjual atau kerja sama? Hubungi dulu Maliki Saputra
-   lewat TikTok/IG @malikisaputra atau https://malikisaputra.biz.id untuk berdiskusi.
-3. Boleh dipakai gratis untuk usaha/organisasi sendiri dan dipelajari.
-
-1. ATTRIBUTION. The credit notice above, in the visible footer, source file
-   headers and this file MUST be retained in all copies and derivative works.
-2. NOT FOR SALE. This template/code, original or modified, MAY NOT be sold,
-   resold or distributed for a fee without written permission from the
-   creator. Contact @malikisaputra first to discuss.
+MALIKI STUDIO NONCOMMERCIAL LICENSE 1.0 (English summary)
+Copyright (c) 2026 Maliki Saputra. Free for learning, personal use, and internal use
+by your own business or organisation; you may modify it and share it free of charge
+with this license and credit intact. You may NOT sell, resell, rent, or distribute it
+for a fee (original or modified), use it to deliver paid services to third parties,
+list it on any marketplace, remove the credit, or claim it as your own without the
+creator's written permission. Provided "AS IS", without warranty. Third-party
+libraries keep their own licenses.
